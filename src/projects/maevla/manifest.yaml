@@ -1,0 +1,29 @@
+project:
+  name: maevla
+  description: "Main research project built on top of SimVLA, RMBench, and AutoGaze."
+
+third_party:
+  - name: simvla_maevla
+    path: third_party/SimVLA
+  - name: rmbench
+    path: third_party/RMBench
+  - name: autogaze
+    path: third_party/AutoGaze
+
+experiments:
+  - simvla_baseline
+  - simvla_autogaze
+
+datasets:
+  raw_root: datasets/raw
+  product_root: datasets/product
+  checkpoints_root: datasets/checkpoints
+
+outputs:
+  runs_root: outputs/runs/maevla
+  eval_root: outputs/eval/rmbench
+  logs_root: outputs/logs/maevla
+  smoke_root: outputs/smoke/maevla
+
+scripts:
+  root: scripts/projects/maevla

@@ -1,0 +1,19 @@
+# 我们将很多太大的东西排除在github之外，避免占用过多的空间和带宽
+
+# datasets
+datasets/raw/
+datasets/checkpoints/
+
+# outputs
+outputs/
+
+# cache
+.cache/
+
+# editor
+.vscode/
+.cursor/
+
+# Python cache
+**/__pycache__/
+*.pyc

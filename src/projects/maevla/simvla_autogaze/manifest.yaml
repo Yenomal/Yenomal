@@ -1,0 +1,48 @@
+experiment:
+  name: simvla_autogaze
+  project: maevla
+  description: "SimVLA + AutoGaze observation pipeline on RMBench."
+
+tag:
+  name: maevla-simvla-autogaze-v1
+  status: planned
+
+third_party_refs:
+  simvla_maevla:
+    commit: d3fa2a2b60a1bf48bc7ced273957446290c2c9d5
+    tag: simvla-maevla-simvla-autogaze-v1
+    status: pending_snapshot
+  rmbench:
+    commit: ead77f635489228b4d621fe49af0390c33ecb4e1
+    tag: rmbench-maevla-simvla-baseline-v1
+    status: pending_snapshot
+  autogaze:
+    commit: 9ab80b9b8be3cc446008e9339277ada012fb7e98
+    tag: autogaze-maevla-v1
+    status: pending_snapshot
+
+entrypoints:
+  train: scripts/projects/maevla/simvla_autogaze/train.sh
+  eval: scripts/projects/maevla/simvla_autogaze/eval.sh
+
+third_party:
+  - name: simvla_maevla
+    path: third_party/SimVLA
+  - name: rmbench
+    path: third_party/RMBench
+  - name: autogaze
+    path: third_party/AutoGaze
+
+datasets:
+  raw: datasets/raw/rmbench
+  product: datasets/product/rmbench_demo_clean_train48_eval2
+  checkpoints: datasets/checkpoints/simvla
+
+outputs:
+  runs: outputs/runs/maevla/simvla_autogaze
+  eval: outputs/eval/rmbench
+  logs: outputs/logs/maevla/simvla_autogaze
+
+notes:
+  - "Experiment tag should be created only after the main repo snapshot is committed."
+  - "Third-party tags should be created only after simvla_maevla, rmbench, and autogaze each have a clean committed snapshot."

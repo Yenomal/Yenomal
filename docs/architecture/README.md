@@ -1,0 +1,1 @@
+虽然我不知道为啥这里写了一个README，但是无妨，当前目录 docs/architecture 是为了保留各种 Yenorepo 结构上的信息

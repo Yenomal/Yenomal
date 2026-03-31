@@ -1,0 +1,19 @@
+# Experiment-local config for wiring the common AutoGaze+SigLIP stack back into SimVLA.
+stack:  # Settings for the reusable visual stack itself.
+  name: autogaze_siglip  # Keep the canonical stack name stable for future registry use.
+  autogaze_repo_root: third_party/AutoGaze  # Reuse the current third_party checkout instead of copying AutoGaze code.
+  autogaze_model_path: nvidia/AutoGaze  # Default gaze generator checkpoint; runtime args can still override this.
+  siglip_model_path: google/siglip2-base-patch16-224  # Default SigLIP checkpoint; runtime args can still override this.
+  history_len: 8  # SimVLA currently expects 8 history frames for the AutoGaze path.
+  gazing_ratio: 0.10  # Match the existing SimVLA AutoGaze training default.
+  task_loss_requirement: null  # Leave disabled unless a stricter gaze filter is explicitly needed.
+  current_view_names: [head, left, right]  # SimVLA RMBench currently consumes these 3 current views in this order.
+  input_mean: [0.485, 0.456, 0.406]  # Match the existing SimVLA image normalization contract.
+  input_std: [0.229, 0.224, 0.225]  # Match the existing SimVLA image normalization contract.
+  attn_implementation: sdpa  # Keep aligned with the current AutoGaze+SigLIP implementation.
+
+adapter:  # SimVLA-facing adapter settings.
+  output_dim: 960  # Placeholder value; the wrapper overrides this at runtime with SimVLA VLM hidden size.
+  projector_hidden_dim: 1536  # Hidden width for the projector MLP before mapping into SimVLA token space.
+  add_source_embeddings: true  # Preserve source-role embeddings so SimVLA still sees history/head/left/right distinctions.
+  add_age_embeddings: true  # Preserve age embeddings so SimVLA still sees temporal order in history tokens.
