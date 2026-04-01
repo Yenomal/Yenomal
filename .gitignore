@@ -17,3 +17,6 @@ outputs/
 # Python cache
 **/__pycache__/
 *.pyc
+
+# workspace
+tempwork/

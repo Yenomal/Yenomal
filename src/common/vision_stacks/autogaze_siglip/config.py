@@ -24,6 +24,7 @@ class StackConfig:
     input_mean: tuple[float, float, float] = (0.485, 0.456, 0.406)
     input_std: tuple[float, float, float] = (0.229, 0.224, 0.225)
     attn_implementation: str = "sdpa"
+    attn_type: str = "bidirectional"
 
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "StackConfig":

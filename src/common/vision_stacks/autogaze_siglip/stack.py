@@ -55,6 +55,7 @@ class AutoGazeSiglipVisionStack(nn.Module):
             config.stack.siglip_model_path,
             scales=self.autogaze.config.scales,
             attn_implementation=config.stack.attn_implementation,
+            attn_type=config.stack.attn_type,
         )
         self.siglip.vision_model.embeddings.register_buffer(
             "position_ids",

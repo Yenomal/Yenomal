@@ -11,6 +11,7 @@ stack:  # Core stack settings shared across baselines.
   input_mean: [0.485, 0.456, 0.406]  # Mean used by the upstream image pipeline before this stack re-normalizes pixels.
   input_std: [0.229, 0.224, 0.225]  # Std used by the upstream image pipeline before this stack re-normalizes pixels.
   attn_implementation: sdpa  # SigLIP attention backend; keep aligned with the current AutoGaze integration.
+  attn_type: bidirectional  # Start simple with full bidirectional attention; higher-level mask policies can be layered later.
 
 adapter:  # Thin reusable adapter that maps raw SigLIP features to consumer-ready tokens.
   output_dim: 960  # Final token width expected by the downstream baseline.

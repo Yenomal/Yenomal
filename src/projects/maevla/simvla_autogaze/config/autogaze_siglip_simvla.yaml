@@ -11,6 +11,7 @@ stack:  # Settings for the reusable visual stack itself.
   input_mean: [0.485, 0.456, 0.406]  # Match the existing SimVLA image normalization contract.
   input_std: [0.229, 0.224, 0.225]  # Match the existing SimVLA image normalization contract.
   attn_implementation: sdpa  # Keep aligned with the current AutoGaze+SigLIP implementation.
+  attn_type: bidirectional  # Keep the current stack fully bidirectional until we reintroduce a separate mask policy layer.
 
 adapter:  # SimVLA-facing adapter settings.
   output_dim: 960  # Placeholder value; the wrapper overrides this at runtime with SimVLA VLM hidden size.
