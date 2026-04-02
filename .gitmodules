@@ -1,12 +1,12 @@
 [submodule "AutoGaze"]
-    path = third_party/AutoGaze
+    path = ./third_party/AutoGaze
     url = https://github.com/Yenomal/AutoGaze.git
 
 [submodule "RMBench"]
-    path = third_party/RMBench
+    path = ./third_party/RMBench
     url = https://github.com/Yenomal/RMBench.git
 
 [submodule "SimVLA"]
-    path = third_party/SimVLA
+    path = ./third_party/SimVLA
     url = https://github.com/Yenomal/SimVLA.git
 
