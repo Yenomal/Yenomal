@@ -1,0 +1,7 @@
+uv run /home/rui/Yenomal/third_party/RMBench/policy/pi05/examples/convert_jax_model_to_pytorch.py \
+    --checkpoint_dir /home/rui/Yenomal/datasets/checkpoints/pi05_base \
+    --output_path /home/rui/Yenomal/datasets/checkpoints/pi05 \
+    --config_name pi05_aloha_common_autogaze_rmbench_hdf5 
+
+
+    2.8.3

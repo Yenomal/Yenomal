@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 from typing import Dict
@@ -7,6 +8,7 @@ from typing import Dict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from safetensors.torch import load_file as load_safetensors
 from transformers import AutoImageProcessor
 
 from .config import AutoGazeSiglipConfig
@@ -47,15 +49,24 @@ class AutoGazeSiglipVisionStack(nn.Module):
         self.add_source_embeddings = bool(config.adapter.add_source_embeddings)
         self.add_age_embeddings = bool(config.adapter.add_age_embeddings)
 
-        self.autogaze = AutoGaze.from_pretrained(config.stack.autogaze_model_path)
-        self.autogaze_processor = AutoGazeImageProcessor.from_pretrained(config.stack.autogaze_model_path)
+        autogaze_model_path = self._resolve_model_path(config.stack.autogaze_model_path)
+        siglip_model_path = self._resolve_model_path(config.stack.siglip_model_path)
 
-        self.siglip_processor = AutoImageProcessor.from_pretrained(config.stack.siglip_model_path)
-        self.siglip = SiglipVisionModel.from_pretrained(
-            config.stack.siglip_model_path,
-            scales=self.autogaze.config.scales,
-            attn_implementation=config.stack.attn_implementation,
-            attn_type=config.stack.attn_type,
+        self.autogaze = self._load_local_pretrained_model(
+            AutoGaze,
+            autogaze_model_path,
+        )
+        self.autogaze_processor = AutoGazeImageProcessor.from_pretrained(str(autogaze_model_path))
+
+        self.siglip_processor = AutoImageProcessor.from_pretrained(str(siglip_model_path))
+        self.siglip = self._load_local_pretrained_model(
+            SiglipVisionModel,
+            siglip_model_path,
+            config_overrides={
+                "scales": self.autogaze.config.scales,
+                "_attn_implementation": config.stack.attn_implementation,
+                "attn_type": config.stack.attn_type,
+            },
         )
         self.siglip.vision_model.embeddings.register_buffer(
             "position_ids",
@@ -115,6 +126,77 @@ class AutoGazeSiglipVisionStack(nn.Module):
         if path.is_absolute():
             return path
         return self.repo_root / path
+
+    def _resolve_model_path(self, model_path: str) -> Path:
+        path = Path(model_path).expanduser()
+        if path.exists():
+            return path.resolve()
+
+        if "/" not in model_path:
+            raise FileNotFoundError(f"Cannot resolve pretrained model path: {model_path}")
+
+        cache_key = "models--" + model_path.replace("/", "--")
+        candidate_roots = []
+        hf_home = os.environ.get("HF_HOME")
+        if hf_home:
+            candidate_roots.append(Path(hf_home) / "hub")
+        hub_cache = os.environ.get("HUGGINGFACE_HUB_CACHE")
+        if hub_cache:
+            candidate_roots.append(Path(hub_cache))
+        candidate_roots.extend(
+            [
+                self.repo_root / ".cache" / ".hf" / "hub",
+                self.repo_root / ".cache" / "huggingface" / "hub",
+            ]
+        )
+
+        for root in candidate_roots:
+            repo_cache = root / cache_key
+            snapshots_dir = repo_cache / "snapshots"
+            if not snapshots_dir.exists():
+                continue
+            ref_path = repo_cache / "refs" / "main"
+            if ref_path.exists():
+                snapshot = snapshots_dir / ref_path.read_text(encoding="utf-8").strip()
+                if snapshot.exists():
+                    return snapshot
+            snapshots = sorted(snapshots_dir.iterdir(), reverse=True)
+            if snapshots:
+                return snapshots[0]
+
+        raise FileNotFoundError(f"Cannot resolve cached snapshot for model id: {model_path}")
+
+    def _load_state_dict(self, model_dir: Path):
+        safetensors_path = model_dir / "model.safetensors"
+        pytorch_bin_path = model_dir / "pytorch_model.bin"
+        if safetensors_path.exists():
+            return load_safetensors(str(safetensors_path), device="cpu")
+        if pytorch_bin_path.exists():
+            return torch.load(str(pytorch_bin_path), map_location="cpu")
+        raise FileNotFoundError(f"No model weights found under {model_dir}")
+
+    def _load_local_pretrained_model(self, model_cls, model_dir: Path, config_overrides: dict | None = None):
+        raw_config = model_cls.config_class.get_config_dict(str(model_dir))[0]
+        if model_cls.__name__ == "SiglipVisionModel" and "vision_config" in raw_config:
+            config = model_cls.config_class.from_dict(raw_config["vision_config"])
+        else:
+            config = model_cls.config_class.from_dict(raw_config)
+        if config_overrides:
+            for key, value in config_overrides.items():
+                setattr(config, key, value)
+
+        model = model_cls(config)
+        state_dict = self._load_state_dict(model_dir)
+        if model_cls.__name__ == "SiglipVisionModel":
+            state_dict = {key: value for key, value in state_dict.items() if key.startswith("vision_model.")}
+        missing_keys, unexpected_keys = model.load_state_dict(state_dict, strict=False)
+        allowed_missing = {"vision_model.embeddings.position_ids"}
+        invalid_missing = [key for key in missing_keys if key not in allowed_missing]
+        if invalid_missing:
+            raise RuntimeError(f"Missing keys when loading {model_dir}: {invalid_missing[:20]}")
+        if unexpected_keys:
+            raise RuntimeError(f"Unexpected keys when loading {model_dir}: {unexpected_keys[:20]}")
+        return model
 
     def _load_third_party_modules(self):
         if str(self.autogaze_repo_root) not in sys.path:

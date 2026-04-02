@@ -3,10 +3,6 @@ experiment:
   project: maevla
   description: "SimVLA baseline on RMBench without AutoGaze observation encoder."
 
-tag:
-  name: maevla-simvla-baseline-v1
-  status: planned
-
 third_party_refs:
   simvla_maevla:
     commit: b5c9a57371ae815ceb5b485101cfe0546a03ea3d
@@ -16,27 +12,3 @@ third_party_refs:
     commit: ead77f635489228b4d621fe49af0390c33ecb4e1
     tag: rmbench-maevla-simvla-baseline-v1
     status: pending_snapshot
-
-entrypoints:
-  train: scripts/projects/maevla/simvla_baseline/train.sh
-  eval: scripts/projects/maevla/simvla_baseline/eval.sh
-
-third_party:
-  - name: simvla_maevla
-    path: third_party/SimVLA
-  - name: rmbench
-    path: third_party/RMBench
-
-datasets:
-  raw: datasets/raw/rmbench
-  product: datasets/product/rmbench_demo_clean_train48_eval2
-  checkpoints: datasets/checkpoints/simvla
-
-outputs:
-  runs: outputs/runs/maevla/simvla_baseline
-  eval: outputs/eval/rmbench
-  logs: outputs/logs/maevla/simvla_baseline
-
-notes:
-  - "Experiment tag should be created only after the main repo snapshot is committed."
-  - "Third-party tags should be created only after simvla_maevla and rmbench each have a clean committed snapshot."
