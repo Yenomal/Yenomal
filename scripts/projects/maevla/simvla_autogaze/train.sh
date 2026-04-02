@@ -5,6 +5,8 @@ set -euo pipefail
 # The defaults below mirror the current codebase assumptions and can be revised for a new experiment version.
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+PROJECT_DIR="${ROOT}/src/projects/maevla/simvla_autogaze"
+COMMON_DIR="${ROOT}/src/common"
 SIMVLA_DIR="${ROOT}/third_party/SimVLA"
 PRODUCT_DIR="${ROOT}/datasets/product/rmbench_demo_clean_train48_eval2"
 
@@ -42,6 +44,8 @@ AUTOGAZE_GAZING_RATIO="0.10"
 
 export CUDA_VISIBLE_DEVICES="${GPU_IDS}"
 export TF_CPP_MIN_LOG_LEVEL=2
+export PYTHONPATH="${PROJECT_DIR}:${COMMON_DIR}:${SIMVLA_DIR}:${PYTHONPATH:-}"
+export MAEVLA_VISUAL_GAZE_CONFIG="${PROJECT_DIR}/config/autogaze_siglip_simvla.yaml"
 
 IFS=',' read -r -a GPU_ARRAY <<< "${GPU_IDS}"
 NUM_PROCESSES=${#GPU_ARRAY[@]}

@@ -10,3 +10,6 @@
     path = ./third_party/SimVLA
     url = https://github.com/Yenomal/SimVLA.git
 
+[submodule "openpi"]
+    path = ./third_party/openpi
+    url = https://github.com/Yenomal/openpi.git

@@ -5,6 +5,9 @@ set -euo pipefail
 # The defaults below come from the current RMBench AutoGaze policy config.
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+PROJECT_DIR="${ROOT}/src/projects/maevla/simvla_autogaze"
+COMMON_DIR="${ROOT}/src/common"
+SIMVLA_DIR="${ROOT}/third_party/SimVLA"
 cd "${ROOT}/third_party/RMBench"
 
 POLICY_NAME="SimVLA_AutoGaze"
@@ -25,6 +28,8 @@ AUTOGAZE_PROJECTOR_HIDDEN_SIZE="1536"
 AUTOGAZE_GAZING_RATIO="0.1"
 
 PYTHONWARNINGS=ignore::UserWarning \
+PYTHONPATH="${PROJECT_DIR}:${COMMON_DIR}:${SIMVLA_DIR}:${PYTHONPATH:-}" \
+MAEVLA_VISUAL_GAZE_CONFIG="${PROJECT_DIR}/config/autogaze_siglip_simvla.yaml" \
 python script/eval_policy.py --config "policy/${POLICY_NAME}/deploy_policy.yml" \
   --overrides \
   --task_name "${TASK_NAME}" \

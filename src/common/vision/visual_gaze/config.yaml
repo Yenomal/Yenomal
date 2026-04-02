@@ -1,0 +1,34 @@
+input:
+  input_mean: [0.485, 0.456, 0.406]
+  input_std: [0.229, 0.224, 0.225]
+  current_view_names: [head, left, right]
+
+gaze_policy:
+  name: autogaze
+  init_mode: pretrained
+  model_path: nvidia/AutoGaze
+  history_len: 8
+  gazing_ratio: 0.10
+  task_loss_requirement: null
+  image_size: 224
+  image_mean: [0.5, 0.5, 0.5]
+  image_std: [0.5, 0.5, 0.5]
+  model_config: {}
+
+encoder:
+  name: siglip
+  init_mode: pretrained
+  model_path: google/siglip2-base-patch16-224
+  image_size: 224
+  image_mean: [0.5, 0.5, 0.5]
+  image_std: [0.5, 0.5, 0.5]
+  attn_implementation: sdpa
+  attn_type: bidirectional
+  model_config: {}
+
+projector:
+  name: mlp
+  output_dim: 960
+  hidden_dim: 1536
+  add_source_embeddings: true
+  add_age_embeddings: true

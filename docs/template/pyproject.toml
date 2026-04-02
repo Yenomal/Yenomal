@@ -1,0 +1,88 @@
+# 模板：面向单个 experiment 的 uv Python 环境定义文件。
+# 这个文件只负责 Python 依赖，不负责 Git tag、datasets 路径、outputs 路径。
+# Git 引用请放在 manifest.sh / tag 中，运行路径请放在 bash 脚本中。
+
+[project]
+# 一个稳定的环境名字。
+# 建议格式：<project>-<experiment> 或 <project>-<runtime-profile>
+name = "maevla-simvla-autogaze"
+
+# 环境定义文件自身的版本号。
+version = "0.1.0"
+
+# 这个环境的简短说明。
+description = "Python runtime for the maevla/simvla_autogaze experiment."
+
+# Python 版本约束。
+# 如果复现很敏感，建议像这里一样把版本锁到 3.10.*。
+requires-python = "==3.10.*"
+
+# 运行时真正需要 import 的核心 Python 依赖。
+# 这里只放实验运行必需的包，不要把所有工具都塞进来。
+dependencies = [
+  "torch==2.7.1",
+  "torchvision==0.22.1",
+  "transformers>=4.57.0",
+  "accelerate>=1.10.0",
+  "safetensors>=0.6.0",
+  "einops>=0.8.0",
+  "h5py>=3.14.0",
+  "mmengine>=0.10.0",
+  "pyarrow>=21.0.0",
+  "tensorboard>=2.20.0",
+  "uvicorn>=0.35.0",
+  "fastapi>=0.117.0",
+  "websockets>=15.0.1",
+  "msgpack-numpy>=0.4.8",
+  "json-numpy>=2.1.1",
+  "wandb>=0.22.0",
+]
+
+[dependency-groups]
+# 只在开发时需要的工具。
+# 这些通常不是实验运行本身的必需依赖。
+dev = [
+  "ipython>=9.0.0",
+  "ipykernel>=6.0.0",
+  "ruff>=0.12.0",
+  "pytest>=8.0.0",
+]
+
+# 训练阶段附加依赖。
+# 如果某些包只在训练时才用到，就放这里。
+train = [
+  "flash-attn==2.8.2",
+]
+
+# 评测阶段附加依赖。
+# 如果 eval 需要额外依赖，但 train 不需要，可以放这里。
+eval = [
+]
+
+[tool.uv]
+# 当这个 pyproject 只是“环境定义文件”而不是“当前目录要被安装成包”时，设为 false。
+package = false
+
+# 如果未来某些依赖必须使用预发布版本，再手动打开这行。
+# prerelease = "allow"
+
+[tool.uv.sources]
+# 这里只放“可安装的本地 Python 包”。
+# 如果一个本地目录还只是 repo 风格代码，而不是规范包，不要强行塞进来。
+# 那种情况先继续用 PYTHONPATH 或 bash 包装脚本更稳。
+#
+# 示例：
+# yenomal = { path = "../../src", editable = true }
+# AutoGaze = { path = "../../third_party/AutoGaze", editable = true }
+#
+# 注意：
+# - third_party/SimVLA 目前更像 repo 风格代码，不建议直接当 uv source。
+# - 整个 third_party/RMBench 也是 repo 风格代码，通常也不建议直接放这里。
+
+[tool.ruff]
+# 可选：本地开发时的 lint 配置。
+line-length = 100
+
+[tool.pytest.ini_options]
+# 可选：测试发现与运行配置。
+addopts = "-q"
