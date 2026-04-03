@@ -1,19 +1,19 @@
 [submodule "AutoGaze"]
-    path = ./third_party/AutoGaze
+    path = third_party/AutoGaze
     url = https://github.com/Yenomal/AutoGaze.git
 
 [submodule "RMBench"]
-    path = ./third_party/RMBench
+    path = third_party/RMBench
     url = https://github.com/Yenomal/RMBench.git
 
 [submodule "SimVLA"]
-    path = ./third_party/SimVLA
+    path = third_party/SimVLA
     url = https://github.com/Yenomal/SimVLA.git
 
 [submodule "openpi"]
-    path = ./third_party/openpi
+    path = third_party/openpi
     url = https://github.com/Yenomal/openpi.git
 
 [submodule "hdf5-to-lerobot-converter"]
-    path = ./third_party/hdf5-to-lerobot-converter
+    path = third_party/hdf5-to-lerobot-converter
     url = https://github.com/LUhaotao/hdf5-to-lerobot-converter.git
