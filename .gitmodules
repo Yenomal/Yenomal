@@ -13,3 +13,7 @@
 [submodule "openpi"]
     path = ./third_party/openpi
     url = https://github.com/Yenomal/openpi.git
+
+[submodule "hdf5-to-lerobot-converter"]
+    path = ./third_party/hdf5-to-lerobot-converter
+    url = https://github.com/LUhaotao/hdf5-to-lerobot-converter.git

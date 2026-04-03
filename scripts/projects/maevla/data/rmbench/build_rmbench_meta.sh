@@ -4,7 +4,7 @@ set -euo pipefail
 # Build RMBench train/eval metadata from the current raw dataset.
 # Edit only the variables in the "Dataset recipe" section when changing the split.
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../.." && pwd)"
 SIMVLA_DIR="${ROOT}/third_party/SimVLA"
 
 # Dataset recipe: this defines which raw data slice becomes the reusable product.

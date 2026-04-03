@@ -4,7 +4,7 @@ set -euo pipefail
 # Compute normalization statistics for the same RMBench product recipe used by training.
 # Keep this script aligned with build_rmbench_meta.sh so both outputs describe the same split.
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../.." && pwd)"
 SIMVLA_DIR="${ROOT}/third_party/SimVLA"
 
 # Dataset recipe: change these only when creating a new product version.

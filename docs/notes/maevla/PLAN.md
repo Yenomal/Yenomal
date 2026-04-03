@@ -16,7 +16,7 @@ TODO —— RMBench分数
 
 - [x]  SimVLA+RMBench —— 0
 - [x]  SimVLA+AutoGaze+RMBench —— 0
-- [ ]  Pi05+RMBench —— 16
+- [x]  Pi05+RMBench —— 16
 - [ ]  Pi05+AutoGaze+RMBench —— 
 - [ ]  Lingbot-VA+RMBench —— 
 - [ ]  Lingbot-VA+AutoGaze+RMBench —— 
