@@ -6,10 +6,10 @@ import torch
 import torch.nn as nn
 from transformers import AutoImageProcessor
 
-from nn.tokenizer import SiglipPatchTokenizer
-from vision.vendor.autogaze.vision_encoders.siglip.configuration_siglip import SiglipVisionConfig
-from vision.vendor.autogaze.vision_encoders.siglip.modeling_siglip import SiglipVisionModel
-from vision.visual_gaze._utils import load_local_pretrained_model, resolve_model_path
+from ...nn.tokenizer import SiglipPatchTokenizer
+from ..vendor.autogaze.vision_encoders.siglip.configuration_siglip import SiglipVisionConfig
+from ..vendor.autogaze.vision_encoders.siglip.modeling_siglip import SiglipVisionModel
+from ..visual_gaze._utils import load_local_pretrained_model, resolve_model_path
 
 
 class SiglipTokenEncoder(nn.Module):

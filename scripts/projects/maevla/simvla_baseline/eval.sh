@@ -5,6 +5,7 @@ set -euo pipefail
 # Edit the defaults below when you want a different task, checkpoint, or rollout setting.
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+SIMVLA_DIR="${ROOT}/third_party/SimVLA"
 cd "${ROOT}/third_party/RMBench"
 
 # Evaluation defaults recovered from the current RMBench SimVLA policy config.
@@ -21,6 +22,7 @@ EXECUTE_HORIZON="5"
 INTEGRATION_STEPS="10"
 
 PYTHONWARNINGS=ignore::UserWarning \
+PYTHONPATH="${SIMVLA_DIR}:${PYTHONPATH:-}" \
 python script/eval_policy.py --config "policy/${POLICY_NAME}/deploy_policy.yml" \
   --overrides \
   --task_name "${TASK_NAME}" \

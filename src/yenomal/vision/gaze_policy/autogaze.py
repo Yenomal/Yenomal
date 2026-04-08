@@ -6,8 +6,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from vision.vendor.autogaze.models.autogaze import AutoGaze, AutoGazeConfig, AutoGazeImageProcessor
-from vision.visual_gaze._utils import extract_size, load_local_pretrained_model, resolve_model_path
+from ..vendor.autogaze.models.autogaze import AutoGaze, AutoGazeConfig, AutoGazeImageProcessor
+from ..visual_gaze._utils import extract_size, load_local_pretrained_model, resolve_model_path
 
 
 class AutoGazePolicy(nn.Module):

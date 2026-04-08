@@ -5,9 +5,9 @@ from typing import Any, Mapping
 import torch
 import torch.nn as nn
 
-from nn import TokenProjector
-from vision.encoder import build_siglip_modules
-from vision.gaze_policy import AutoGazePolicy
+from ...nn import TokenProjector
+from ..encoder import build_siglip_modules
+from ..gaze_policy import AutoGazePolicy
 
 from .config import VisualGazeConfig, load_config, load_default_config
 
